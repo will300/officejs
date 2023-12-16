@@ -14,13 +14,13 @@
   <HighResolutionIconUrl DefaultValue="https://xlwings.github.io/officejs-helloworld/icons/icon-64.png" />
   <SupportUrl DefaultValue="https://www.xlwings.org/contact" />
   <AppDomains>
-    <AppDomain>https://xlwings.github.io/officejs-helloworld/</AppDomain>
+    <AppDomain>https://will300.github.io/officejs/</AppDomain>
   </AppDomains>
   <Hosts>
     <Host Name="Workbook" />
   </Hosts>
   <DefaultSettings>
-    <SourceLocation DefaultValue="https://xlwings.github.io/officejs-helloworld/taskpane.html" />
+    <SourceLocation DefaultValue="https://will300.github.io/officejs/taskpane.html" />
   </DefaultSettings>
   <Permissions>ReadWriteDocument</Permissions>
   <VersionOverrides xmlns="http://schemas.microsoft.com/office/taskpaneappversionoverrides" xsi:type="VersionOverridesV1_0">
