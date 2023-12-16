@@ -79,7 +79,7 @@
         <bt:Url id="Taskpane.Url" DefaultValue="https://will300.github.io/officejs/taskpane.html" />
       </bt:Urls>
       <bt:ShortStrings>
-        <bt:String id="MyTab.TabLabel" DefaultValue="Hello World" />
+        <bt:String id="MyTab.TabLabel" DefaultValue="Checker" />
         <bt:String id="MyCommandsGroup.Label" DefaultValue="MyGroup" />
         <bt:String id="MyTaskpaneButton.Label" DefaultValue="Show Taskpane" />
       </bt:ShortStrings>
