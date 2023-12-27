@@ -81,17 +81,12 @@
         async function toggleCheck(element, errors) {
             // Remove 'active' class from all check blocks
             element.classList.toggle('active');
+            var isActive = element.classList.contains('active');
             try {
                 await Excel.run(async (context) => {
                       function fadeFill(index) {
                           var cell = usedRange.getCell(index[0], index[1]);
-                          var color_key = {
-                            "orange": "#FFDAB9",
-                            "#FFDAB9": "orange",
-                            "purple": "#D8BFD8",
-                            "#D8BFD8": "purple"
-                          }
-                          cell.format.fill.color = color_key[cell.format.fill.color]
+                          cell.format.fill.tintAndShade = (isActive) ? 0 :0.5;
                           cell.load()
                         }
                       if (sessionStorage.getItem(errors)) {
