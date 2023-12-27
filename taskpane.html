@@ -74,7 +74,10 @@
 
         function toggleCheck(element) {
             // Remove 'active' class from all check blocks
+            console.log('Border Color:', window.getComputedStyle(element).borderColor);
             element.classList.toggle('active');
+            console.log('Border Color:', window.getComputedStyle(element).borderColor);
+
             }
 
         // Based on 'Basic API call' sample from ScriptLab
