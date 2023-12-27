@@ -19,6 +19,7 @@
           height: 50px;
           padding: 10px;
           margin-bottom: 10px;
+          align-items: center;
           cursor: pointer;
           border: 1px solid #ccc;
         }
@@ -106,15 +107,19 @@
                 let sheets = context.workbook.worksheets.load("items/name");
                 await context.sync();
 
-                var usedRange = sheets.items[0].getUsedRange();
-                if (sessionStorage.getItem('Errors1')) {
-                    var indices1 = JSON.parse(sessionStorage.getItem('Errors1'));
-                    function wipeFill(index) {
+                function wipeFill(index) {
                     var cell = usedRange.getCell(index[0], index[1]);
                     cell.format.fill.clear();
                     cell.load()
                     }
-                    indices1.forEach(wipeFill)
+                var usedRange = sheets.items[0].getUsedRange();
+                if (sessionStorage.getItem('rowErrors')) {
+                    var rowErrors = JSON.parse(sessionStorage.getItem('rowErrors'));
+                    rowErrors.forEach(wipeFill)
+                }
+                if (sessionStorage.getItem('colErrors')) {
+                    var colErrors = JSON.parse(sessionStorage.getItem('colErrors'));
+                    colErrors.forEach(wipeFill)
                 }
                 await context.sync();
 
@@ -159,13 +164,20 @@
                 }
 
                 usedRange = sheets.items[0].getUsedRange();
-                sessionStorage.setItem('Errors1', JSON.stringify(data.data["sheet1"]["indices1"]));
-                function addComment(index) {
+                sessionStorage.setItem('rowErrors', JSON.stringify(data.data["sheet1"]["rowIndices"]));
+                sessionStorage.setItem('colErrors', JSON.stringify(data.data["sheet1"]["colIndices"]));
+                function highlightPurple(index) {
                     var cell = usedRange.getCell(index[0], index[1]);
-                    cell.format.fill.color = "red";
+                    cell.format.fill.color = "purple";
                     cell.load()
                 }
-                data.data["sheet1"]["indices1"].forEach(addComment)
+                function highlightOrange(index) {
+                    var cell = usedRange.getCell(index[0], index[1]);
+                    cell.format.fill.color = "orange";
+                    cell.load()
+                }
+                data.data["sheet1"]["rowIndices"].forEach(highlightPurple)
+                data.data["sheet1"]["colIndices"].forEach(highlightOrange)
                 return context.sync().then(function () {
                     console.log("Fill color changed successfully.");
                 });
