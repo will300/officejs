@@ -92,7 +92,7 @@
                           var errors = JSON.parse(sessionStorage.getItem(errors));
                           errors.forEach(fadeFill)
                       }
-
+                    await context.sync();
                     });
                 } catch (error) {
             console.log("Error: " + error);
