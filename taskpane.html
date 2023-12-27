@@ -61,13 +61,7 @@
 
         function toggleCheck(element) {
             // Remove 'active' class from all check blocks
-            var checkBlocks = document.querySelectorAll('.check-block');
-            checkBlocks.forEach(function (block) {
-                block.classList.remove('active');
-            });
-
-            // Add 'active' class to the clicked check block 
-            element.classList.add('active');
+            element.classList.toggle('active');
             }
 
         // Based on 'Basic API call' sample from ScriptLab
