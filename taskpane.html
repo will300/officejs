@@ -6,12 +6,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>My Taskpane</title>
     <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+    <style>
+        body {
+          font-family: Arial, sans-serif;
+          margin: 0;
+          padding: 0;
+        }
+    
+        .check-block {
+          width: 100%;
+          padding: 10px;
+          margin-bottom: 10px;
+          cursor: pointer;
+          border: 1px solid #ccc;
+        }
+    
+        .check-block:hover {
+          background-color: #f0f0f0;
+        }
+    
+        .active {
+          background-color: #4caf50;
+          color: white;
+        }
+      </style>
 </head>
 
 <body>
     <!-- Put a button on the task pane -->
-    <p>Hit the Run button to paint the selected cells yellow and write the address to cell A1!</p>
     <button id="run-btn" type="button">Run</button>
+    <div class="check-block" onclick="toggleCheck(this)">Check 1: Status OK</div>
+    <div class="check-block" onclick="toggleCheck(this)">Check 2: Status Warning</div>
+    <div class="check-block" onclick="toggleCheck(this)">Check 3: Status Error</div>
+  
     <script>
         // Initialize Office.js
         Office.onReady(function (info) { });
@@ -19,8 +46,19 @@
         // Add a click event listener to the button
         document.getElementById("run-btn").addEventListener("click", run);
 
+        function toggleCheck(element) {
+            // Remove 'active' class from all check blocks
+            var checkBlocks = document.querySelectorAll('.check-block');
+            checkBlocks.forEach(function (block) {
+                block.classList.remove('active');
+            });
+
+            // Add 'active' class to the clicked check block
+            element.classList.add('active');
+            }
+
         // Based on 'Basic API call' sample from ScriptLab
-        async function run() {
+        async function example() {
             await Excel.run(async (context) => {
                 const range = context.workbook.getSelectedRange();
                 range.format.fill.color = "yellow";
@@ -31,6 +69,82 @@
                 const sheets = context.workbook.worksheets;
                 sheets.getItem("Sheet1").getRange("A1").values = [["The selected address was " + range.address + "."]];
             });
+        }
+
+        async function run() {
+        try {
+            await Excel.run(async (context) => {
+
+                let sheets = context.workbook.worksheets.load("items/name");
+                await context.sync();
+
+                var usedRange = sheets.items[0].getUsedRange();
+                if (sessionStorage.getItem('Errors1')) {
+                    var indices1 = JSON.parse(sessionStorage.getItem('Errors1'));
+                    function wipeFill(index) {
+                    var cell = usedRange.getCell(index[0], index[1]);
+                    cell.format.fill.clear();
+                    cell.load()
+                    }
+                    indices1.forEach(wipeFill)
+                }
+                await context.sync();
+
+                const dataToSend = {};
+                var sheetNumber = 1;
+                sheets.items.forEach((sheet) => {
+                    dataToSend["sheet" + sheetNumber.toString()] = sheet.getUsedRange()
+                    sheetNumber += 1;
+                });
+                await context.sync();
+
+                for (var sheetName in dataToSend) {
+                    context.load(dataToSend[sheetName], 'rowIndex,columnIndex,values,formulas');
+                }
+                await context.sync();
+                
+                for (var sheetName in dataToSend) {
+                    dataToSend[sheetName] = {
+                    "rowIndex": dataToSend[sheetName].rowIndex,
+                    "columnIndex": dataToSend[sheetName].columnIndex,
+                    "values": dataToSend[sheetName].values,
+                    "formulas": dataToSend[sheetName].formulas
+                    }
+                }
+
+                var temp_id = 'e85f-2a00-23c5-7f87-7c01-88ce-73d3-1afb-826'
+                var flaskApiUrl = 'https://' + temp_id + '.ngrok-free.app/api/data';
+
+                try {
+                    var response = await fetch(flaskApiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(dataToSend)
+                    })
+                    var data = await response.json()
+                    //console.log('Data here:', data);
+                    data.data = JSON.parse(data.data)
+                } catch(error) {
+                    throw error
+                }
+
+                usedRange = sheets.items[0].getUsedRange();
+                sessionStorage.setItem('Errors1', JSON.stringify(data.data["sheet1"]["indices1"]));
+                function addComment(index) {
+                    var cell = usedRange.getCell(index[0], index[1]);
+                    cell.format.fill.color = "red";
+                    cell.load()
+                }
+                data.data["sheet1"]["indices1"].forEach(addComment)
+                return context.sync().then(function () {
+                    console.log("Fill color changed successfully.");
+                });
+            });
+        } catch (error) {
+            console.log("Error: " + error);
+        }
         }
 
     </script>
