@@ -85,7 +85,13 @@
                 await Excel.run(async (context) => {
                       function fadeFill(index) {
                           var cell = usedRange.getCell(index[0], index[1]);
-                          cell.format.fill.tintAndShade = 0.5 - cell.format.fill.tintAndShade;
+                          var color_key = {
+                            "orange": "#FFDAB9",
+                            "#FFDAB9": "orange",
+                            "purple": "#D8BFD8",
+                            "#D8BFD8": "purple"
+                          }
+                          cell.format.fill.color = color_key[cell.format.fill.color]
                           cell.load()
                         }
                       if (sessionStorage.getItem(errors)) {
