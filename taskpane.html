@@ -67,9 +67,9 @@
 <body>
     <!-- Put a button on the task pane -->
     <button id="run-btn" type="button">Run</button>
-    <div class="check-block check-1" onclick="toggleCheck(this)">Row References</div>
-    <div class="check-block check-2" onclick="toggleCheck(this)">Column References</div>
-    <div class="check-block check-3" onclick="toggleCheck(this)">Calculations</div>
+    <div class="check-block check-1" onclick="toggleCheck(this, 'rowErrors')">Row References</div>
+    <div class="check-block check-2" onclick="toggleCheck(this, 'colErrors')">Column References</div>
+    <div class="check-block check-3" onclick="toggleCheck(this, 'calcErrors')">Calculations</div>
   
     <script>
         // Initialize Office.js
@@ -78,12 +78,25 @@
         // Add a click event listener to the button
         document.getElementById("run-btn").addEventListener("click", run);
 
-        function toggleCheck(element) {
+        async function toggleCheck(element, errors) {
             // Remove 'active' class from all check blocks
-            console.log('Border Color:', window.getComputedStyle(element).borderColor);
             element.classList.toggle('active');
-            console.log('Border Color:', window.getComputedStyle(element).borderColor);
+            try {
+                await Excel.run(async (context) => {
+                      function fadeFill(index) {
+                          var cell = usedRange.getCell(index[0], index[1]);
+                          cell.format.fill.tintAndShade = 0.5 - cell.format.fill.tintAndShade;
+                          cell.load()
+                        }
+                      if (sessionStorage.getItem(errors)) {
+                          var errors = JSON.parse(sessionStorage.getItem(errors));
+                          errors.forEach(fadeFill)
+                      }
 
+                    });
+                } catch (error) {
+            console.log("Error: " + error);
+        }  
             }
 
         // Based on 'Basic API call' sample from ScriptLab
@@ -145,7 +158,7 @@
                     }
                 }
 
-                var temp_id = 'e85f-2a00-23c5-7f87-7c01-88ce-73d3-1afb-826'
+                var temp_id = '38f7-2a00-23c5-7f87-7c01-88ca-b357-824a-e929'
                 var flaskApiUrl = 'https://' + temp_id + '.ngrok-free.app/api/data';
 
                 try {
