@@ -82,7 +82,7 @@
             // Remove 'active' class from all check blocks
             element.classList.toggle('active');
             var isActive = element.classList.contains('active');
-            try {
+            //try {
                 await Excel.run(async (context) => {
                       function fadeFill(index) {
                           var cell = usedRange.getCell(index[0], index[1]);
@@ -95,9 +95,9 @@
                       }
                     await context.sync();
                     });
-                } catch (error) {
-            console.log("Error: " + error);
-        }  
+                //} catch (error) {
+                //    console.log("Error: " + error);
+                //}  
             }
 
         // Based on 'Basic API call' sample from ScriptLab
