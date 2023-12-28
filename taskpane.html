@@ -98,6 +98,7 @@
                         }
                       
                       console.log("Checking for errors")
+                      console.log(sessionStorage);
                       if (sessionStorage.getItem(errors)) {
                           console.log("Found some")
                           var errors = JSON.parse(sessionStorage.getItem(errors));
