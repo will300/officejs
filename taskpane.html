@@ -76,7 +76,7 @@
         Office.onReady(function (info) { });
 
         // Add a click event listener to the button
-        document.getElementById("run-btn").addEventListener("click", run);
+        //document.getElementById("run-btn").addEventListener("click", run);
 
         async function toggleCheck(element, errors) {
             // Remove 'active' class from all check blocks
@@ -214,6 +214,11 @@
             console.log("Error: " + error);
         }
         }
+
+    run();
+
+    // Listen for changes to the sheet and execute the run function on change
+    document.addEventListener("change", run);
 
     </script>
 </body>
