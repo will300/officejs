@@ -83,6 +83,7 @@
             element.classList.toggle('active');
             var isActive = element.classList.contains('active');
             //try {
+            console.log("About to try fading");
                 await Excel.run(async (context) => {
                       console.log("Getting range");
                       let sheets = context.workbook.worksheets.load("items/name");
