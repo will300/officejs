@@ -102,8 +102,8 @@
                       console.log(sessionStorage);
                       if (sessionStorage.getItem(errors)) {
                           console.log("Found some")
-                          var errors = JSON.parse(sessionStorage.getItem(errors));
-                          errors.forEach(fadeFill)
+                          var errorIndices = JSON.parse(sessionStorage.getItem(errors));
+                          errorIndices.forEach(fadeFill)
                       }
                       console.log("Done");
                     await context.sync();
