@@ -93,7 +93,7 @@
                       function fadeFill(index) {
                           console.log("Fading fill");
                           var cell = usedRange.getCell(index[0], index[1]);
-                          cell.format.fill.tintAndShade = (isActive) ? 0 :0.5;
+                          cell.format.fill.tintAndShade = (isActive) ? 0 :0.8;
                           cell.load()
                         }
                       
@@ -195,11 +195,13 @@
                 function highlightPurple(index) {
                     var cell = usedRange.getCell(index[0], index[1]);
                     cell.format.fill.color = "purple";
+                    cell.format.fill.tintAndShade = 0.8;
                     cell.load()
                 }
                 function highlightOrange(index) {
                     var cell = usedRange.getCell(index[0], index[1]);
                     cell.format.fill.color = "orange";
+                    cell.format.fill.tintAndShade = 0.8;
                     cell.load()
                 }
                 data.data["sheet1"]["rowIndices"].forEach(highlightPurple)
