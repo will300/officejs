@@ -99,7 +99,6 @@
                       
                       console.log("Checking for errors");
                       console.log(errors);
-                      console.log(sessionStorage);
                       if (sessionStorage.getItem(errors)) {
                           console.log("Found some")
                           var errorIndices = JSON.parse(sessionStorage.getItem(errors));
