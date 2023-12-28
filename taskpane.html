@@ -97,14 +97,15 @@
                           cell.load()
                         }
                       
-                      console.log("Checking for errors")
-                      console.log(errors)
+                      console.log("Checking for errors");
+                      console.log(errors);
                       console.log(sessionStorage);
                       if (sessionStorage.getItem(errors)) {
                           console.log("Found some")
                           var errors = JSON.parse(sessionStorage.getItem(errors));
                           errors.forEach(fadeFill)
                       }
+                      console.log("Done");
                     await context.sync();
                     });
                 //} catch (error) {
