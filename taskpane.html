@@ -66,7 +66,7 @@
 
 <body>
     <!-- Put a button on the task pane -->
-    <button id="run-btn" type="button">Run</button>
+    <button id="run-btn" type="button">Refresh</button>
     <div class="check-block check-1" onclick="toggleCheck(this, 'rowErrors')">Row References</div>
     <div class="check-block check-2" onclick="toggleCheck(this, 'colErrors')">Column References</div>
     <div class="check-block check-3" onclick="toggleCheck(this, 'calcErrors')">Calculations</div>
@@ -76,7 +76,7 @@
         Office.onReady(function (info) { });
         //
         // Add a click event listener to the button
-        //document.getElementById("run-btn").addEventListener("click", run);
+        document.getElementById("run-btn").addEventListener("click", run);
 
         async function toggleCheck(element, errors) {
             // Remove 'active' class from all check blocks
@@ -215,11 +215,6 @@
         }
         }
 
-    run();
-
-    // Listen for changes to the sheet and execute the run function on change
-    document.addEventListener("change", run);
-    // Test
     </script>
 </body>
 
