@@ -84,11 +84,17 @@
             var isActive = element.classList.contains('active');
             //try {
                 await Excel.run(async (context) => {
+
+                      let sheets = context.workbook.worksheets.load("items/name");
+                      await context.sync();
+                      var usedRange = sheets.items[0].getUsedRange();
+
                       function fadeFill(index) {
                           var cell = usedRange.getCell(index[0], index[1]);
                           cell.format.fill.tintAndShade = (isActive) ? 0 :0.5;
                           cell.load()
                         }
+                      
                       if (sessionStorage.getItem(errors)) {
                           var errors = JSON.parse(sessionStorage.getItem(errors));
                           errors.forEach(fadeFill)
