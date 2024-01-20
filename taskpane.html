@@ -42,6 +42,11 @@
           border-color: #e74c3c; /* Red color for Check 3 */
           box-sizing: border-box;
         }
+
+        .check-block.check-4 {
+          border-color: #0000FF; /* Red color for Check 3 */
+          box-sizing: border-box;
+        }
     
         .check-block.check-1.active {
           border-color: #800080;
@@ -61,6 +66,12 @@
           border-style: solid;
           box-sizing: border-box;
         }
+        .check-block.check-4.active {
+          border-color: #0000FF;
+          border-width: 3px;
+          border-style: solid;
+          box-sizing: border-box;
+        }
       </style>
 </head>
 
@@ -69,7 +80,8 @@
     <button id="run-btn" type="button">Refresh</button>
     <div class="check-block check-1" onclick="toggleCheck(this, 'rowErrors')">Row References</div>
     <div class="check-block check-2" onclick="toggleCheck(this, 'colErrors')">Column References</div>
-    <div class="check-block check-3" onclick="toggleCheck(this, 'calcErrors')">Calculations</div>
+    <div class="check-block check-3" onclick="toggleCheck(this, 'divErrors')">Div Errors</div>
+    <div class="check-block check-4" onclick="toggleCheck(this, 'refErrors')">Ref Errors</div>
   
     <script>
         // Initialize Office.js
@@ -153,17 +165,7 @@
                     context.load(dataToSend["sheets"][i]["range"], 'rowIndex,columnIndex,values,formulas');
                 }
                 await context.sync();
-                /*
-                for (let i = 0; i < dataToSend["sheets"].length; i++) {
-                    dataToSend["sheets"][i][sheetName] = {
-                    "sheetName": sheetName.toString(),
-                    "rowIndex": dataToSend[sheetName].rowIndex,
-                    "columnIndex": dataToSend[sheetName].columnIndex,
-                    "values": dataToSend[sheetName].values,
-                    "formulas": dataToSend[sheetName].formulas
-                    }
-                }
-                */
+
                 var temp_id = '63ed-62-252-28-178'
                 var flaskApiUrl = 'https://' + temp_id + '.ngrok-free.app/api/data';
 
@@ -176,7 +178,7 @@
                         body: JSON.stringify(dataToSend)
                     })
                     var data = await response.json()
-                    //console.log('Data here:', data);
+
                     data.data = JSON.parse(data.data)
                 } catch(error) {
                     throw error
