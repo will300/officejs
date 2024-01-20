@@ -150,6 +150,7 @@
                 
                 for (var sheetName in dataToSend) {
                     dataToSend[sheetName] = {
+                    "sheetName": sheetName,
                     "rowIndex": dataToSend[sheetName].rowIndex,
                     "columnIndex": dataToSend[sheetName].columnIndex,
                     "values": dataToSend[sheetName].values,
