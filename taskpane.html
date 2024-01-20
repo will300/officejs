@@ -187,6 +187,8 @@
                 usedRange = sheets.items[0].getUsedRange();
                 sessionStorage.setItem('rowErrors', JSON.stringify(data.data["sheet1"]["rowIndices"]));
                 sessionStorage.setItem('colErrors', JSON.stringify(data.data["sheet1"]["colIndices"]));
+                sessionStorage.setItem('divErrors', JSON.stringify(data.data["sheet1"]["divIndices"]));
+                sessionStorage.setItem('rowErrors', JSON.stringify(data.data["sheet1"]["refIndices"]));
                 function highlight(index, color) {
                     var cell = usedRange.getCell(index[0], index[1]);
                     cell.format.fill.color = color;
