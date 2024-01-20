@@ -126,6 +126,10 @@
             });
         }
 
+        function arraysEqual(arr1, arr2) {
+            return JSON.stringify(arr1) === JSON.stringify(arr2);
+        }
+
         async function toggleCheck(element, errors) {
             // Remove 'active' class from all check blocks
             element.classList.toggle('active');
