@@ -135,21 +135,27 @@
                 }
                 await context.sync();
 
-                const dataToSend = {};
+                const dataToSend = {
+                    "sheets": []
+                };
                 var sheetNumber = 1;
                 sheets.items.forEach((sheet) => {
-                    dataToSend["sheet" + sheetNumber.toString()] = sheet.getUsedRange()
+                    //dataToSend["sheet" + sheetNumber.toString()] = sheet.getUsedRange()
+                    dataToSend["sheets"].push({
+                        "sheetName": sheet.name,  
+                        "range": sheet.getUsedRange()
+                    })
                     sheetNumber += 1;
                 });
                 await context.sync();
 
-                for (var sheetName in dataToSend) {
-                    context.load(dataToSend[sheetName], 'rowIndex,columnIndex,values,formulas');
+                for (let i = 0; i < dataToSend["sheets"].length; i++) {
+                    context.load(dataToSend["sheets"][i]["range"], 'rowIndex,columnIndex,values,formulas');
                 }
                 await context.sync();
-                
-                for (var sheetName in dataToSend) {
-                    dataToSend[sheetName] = {
+                /*
+                for (let i = 0; i < dataToSend["sheets"].length; i++) {
+                    dataToSend["sheets"][i][sheetName] = {
                     "sheetName": sheetName.toString(),
                     "rowIndex": dataToSend[sheetName].rowIndex,
                     "columnIndex": dataToSend[sheetName].columnIndex,
@@ -157,7 +163,7 @@
                     "formulas": dataToSend[sheetName].formulas
                     }
                 }
-
+                */
                 var temp_id = '63ed-62-252-28-178'
                 var flaskApiUrl = 'https://' + temp_id + '.ngrok-free.app/api/data';
 
