@@ -88,7 +88,43 @@
         Office.onReady(function (info) { });
         
         // Add a click event listener to the button
-        document.getElementById("run-btn").addEventListener("click", run);
+        //document.getElementById("run-btn").addEventListener("click", run);
+
+        setInterval(trackChangesInAllSheets, 1000);
+
+        var previousState = {};  // Store the previous state of target areas
+
+        function trackChangesInAllSheets() {
+            Excel.run(function (context) {
+                // Get all worksheets in the workbook
+                var worksheets = context.workbook.worksheets.load("items/name");
+
+                return context.sync()
+                    .then(function () {
+                        // Loop through each worksheet
+                        worksheets.items.forEach(function (worksheet) {
+                            // Get the used range for the current worksheet
+                            var usedRange = worksheet.getUsedRange();
+                            usedRange.load("formulas");
+
+                            // Synchronize changes
+                            context.sync()
+                                .then(function () {
+                                    var currentState = usedRange.formulas;
+
+                                    // Compare with the previous state
+                                    if (!arraysEqual(currentState, previousState[worksheet.name])) {
+                                        console.log("Changes detected in sheet " + worksheet.name + ": " + JSON.stringify(currentState));
+                                        run();
+                                    }
+
+                                    // Update previous state for the current sheet
+                                    previousState[worksheet.name] = currentState;
+                                });
+                        });
+                    });
+            });
+        }
 
         async function toggleCheck(element, errors) {
             // Remove 'active' class from all check blocks
@@ -127,13 +163,6 @@
         async function run() {
         try {
             await Excel.run(async (context) => {
-
-                var tableBinding = context.workbook.bindings.getItemOrNullObject("myTable");
-
-                tableBinding.addHandlerAsync(Office.EventType.BindingDataChanged, function (eventArgs) {
-                    console.log("Table data changed: " + JSON.stringify(eventArgs));
-                    // Add code to handle the data change
-                });
 
                 let sheets = context.workbook.worksheets.load("items/name");
                 await context.sync();
