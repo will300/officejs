@@ -186,12 +186,12 @@
                     colErrors.forEach(wipeFill)
                 }
                 if (sessionStorage.getItem('divErrors')) {
-                    var colErrors = JSON.parse(sessionStorage.getItem('divErrors'));
-                    colErrors.forEach(wipeFill)
+                    var divErrors = JSON.parse(sessionStorage.getItem('divErrors'));
+                    divErrors.forEach(wipeFill)
                 }
                 if (sessionStorage.getItem('refErrors')) {
-                    var colErrors = JSON.parse(sessionStorage.getItem('refErrors'));
-                    colErrors.forEach(wipeFill)
+                    var refErrors = JSON.parse(sessionStorage.getItem('refErrors'));
+                    refErrors.forEach(wipeFill)
                 }
                 await context.sync();
 
@@ -236,7 +236,7 @@
                 sessionStorage.setItem('rowErrors', JSON.stringify(data.data["sheet1"]["rowIndices"]));
                 sessionStorage.setItem('colErrors', JSON.stringify(data.data["sheet1"]["colIndices"]));
                 sessionStorage.setItem('divErrors', JSON.stringify(data.data["sheet1"]["divIndices"]));
-                sessionStorage.setItem('rowErrors', JSON.stringify(data.data["sheet1"]["refIndices"]));
+                sessionStorage.setItem('refErrors', JSON.stringify(data.data["sheet1"]["refIndices"]));
                 function highlight(index, color) {
                     var cell = usedRange.getCell(index[0], index[1]);
                     cell.format.fill.color = color;
