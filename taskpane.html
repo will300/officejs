@@ -185,6 +185,14 @@
                     var colErrors = JSON.parse(sessionStorage.getItem('colErrors'));
                     colErrors.forEach(wipeFill)
                 }
+                if (sessionStorage.getItem('divErrors')) {
+                    var colErrors = JSON.parse(sessionStorage.getItem('divErrors'));
+                    colErrors.forEach(wipeFill)
+                }
+                if (sessionStorage.getItem('refErrors')) {
+                    var colErrors = JSON.parse(sessionStorage.getItem('refErrors'));
+                    colErrors.forEach(wipeFill)
+                }
                 await context.sync();
 
                 const dataToSend = {
