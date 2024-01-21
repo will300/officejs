@@ -220,14 +220,14 @@
                     var temp_id = '63ed-62-252-28-178'
                     var flaskApiUrl = 'https://' + temp_id + '.ngrok-free.app/api/data';
 
-                    console.log("SessionID: ", authToken)
+                    console.log("SessionID: ", authToken, `Bearer ${authToken.toString()}`)
 
                     try {
                         var response = await fetch(flaskApiUrl, {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
-                                'Authorization': `Bearer ${authToken}`
+                                'Authorization': `Bearer ${authToken.toString()}`
                                 },
                             body: JSON.stringify(dataToSend)
                         })
