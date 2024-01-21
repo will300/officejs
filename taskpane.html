@@ -89,6 +89,9 @@
         
         // Add a click event listener to the button
         //document.getElementById("run-btn").addEventListener("click", run);
+        
+        // Generate a unique token at the beginning of the script
+        const authToken = generateAuthToken();
 
         setInterval(trackChangesInAllSheets, 1000);
 
@@ -216,7 +219,6 @@
 
                     var temp_id = '63ed-62-252-28-178'
                     var flaskApiUrl = 'https://' + temp_id + '.ngrok-free.app/api/data';
-                    const sessionId = getCookie('ShCLSessionID');
 
                     console.log("SessionID: ", sessionId)
 
@@ -225,7 +227,7 @@
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
-                                //'Authorization': `Bearer ${sessionId}`
+                                'Authorization': `Bearer ${authToken}`
                                 },
                             body: JSON.stringify(dataToSend)
                         })
@@ -260,18 +262,17 @@
             }
         }
 
-        function getCookie(name) {
-            const value = `; ${document.cookie}`;
-            console.log('All cookies:', value);
+        function generateAuthToken() {
+            const tokenLength = 32;
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let token = '';
 
-            const parts = value.split(`; ${name}=`);
-            if (parts.length === 2) {
-                console.log(`Found cookie ${name}: ${parts.pop().split(';').shift()}`);
-                return parts.pop().split(';').shift();
+            for (let i = 0; i < tokenLength; i++) {
+                const randomIndex = Math.floor(Math.random() * characters.length);
+                token += characters.charAt(randomIndex);
             }
 
-            console.log(`Cookie ${name} not found`);
-            return undefined;
+            return token;
         }
 
     </script>
