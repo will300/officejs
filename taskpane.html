@@ -262,8 +262,16 @@
 
         function getCookie(name) {
             const value = `; ${document.cookie}`;
+            console.log('All cookies:', value);
+
             const parts = value.split(`; ${name}=`);
-            if (parts.length === 2) return parts.pop().split(';').shift();
+            if (parts.length === 2) {
+                console.log(`Found cookie ${name}: ${parts.pop().split(';').shift()}`);
+                return parts.pop().split(';').shift();
+            }
+
+            console.log(`Cookie ${name} not found`);
+            return undefined;
         }
 
     </script>
