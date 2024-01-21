@@ -114,7 +114,7 @@
 
                                     // Compare with the previous state
                                     if (!arraysEqual(currentState, previousState[worksheet.name])) {
-                                        console.log("Changes detected in sheet " + worksheet.name + ": " + JSON.stringify(currentState));
+                                        //console.log("Changes detected in sheet " + worksheet.name + ": " + JSON.stringify(currentState));
                                         run();
                                     }
 
@@ -225,7 +225,7 @@
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
-                                'Authorization': `Bearer ${sessionId}`
+                                //'Authorization': `Bearer ${sessionId}`
                                 },
                             body: JSON.stringify(dataToSend)
                         })
