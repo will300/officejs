@@ -218,6 +218,8 @@
                     var flaskApiUrl = 'https://' + temp_id + '.ngrok-free.app/api/data';
                     const sessionId = getCookie('ShCLSessionID');
 
+                    console.log("SessionID: ", sessionId)
+
                     try {
                         var response = await fetch(flaskApiUrl, {
                             method: 'POST',
