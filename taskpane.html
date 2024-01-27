@@ -93,6 +93,7 @@
         // Generate a unique token at the beginning of the script
         const authToken = generateAuthToken();
 
+        sessionStorage.clear();    
         run();
         setInterval(trackChangesInAllSheets, 1000);
 
