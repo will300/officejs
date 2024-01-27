@@ -197,6 +197,7 @@
                                     'refErrors': []
                                 };
                             }
+                            console.log("sessionStorage.getItem(sheetName): ", sessionStorage.getItem(sheetName))
                             if (sessionStorage.getItem(sheetName).hasOwnProperty(varName)) {
                                 var variable = JSON.parse(sessionStorage.getItem(sheetName)[varName]);
                                 console.log("Wiping: ", sheetName, varName)
