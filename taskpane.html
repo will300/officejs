@@ -188,8 +188,8 @@
                             if (!sessionStorage.getItem(sheetName)) {
                                 sessionStorage[sheetName] = {};
                             }
-                            else if (sessionStorage[sheetName].getItem(varName)) {
-                                var variable = JSON.parse(sessionStorage[sheetName].getItem(varName));
+                            else if (sessionStorage.getItem(sheetName).hasOwnProperty(varName)) {
+                                var variable = JSON.parse(sessionStorage.getItem(sheetName)[varName]);
                                 variable.forEach(wipeFill);
                             }
                         });
@@ -248,10 +248,10 @@
                         usedRange = worksheet.getUsedRange();
                         sheetName = worksheet.name
                         
-                        sessionStorage[sheetName].setItem('rowErrors', JSON.stringify(data.data["sheets"][sheetName]["rowIndices"]));
-                        sessionStorage[sheetName].setItem('colErrors', JSON.stringify(data.data["sheets"][sheetName]["colIndices"]));
-                        sessionStorage[sheetName].setItem('divErrors', JSON.stringify(data.data["sheets"][sheetName]["divIndices"]));
-                        sessionStorage[sheetName].setItem('refErrors', JSON.stringify(data.data["sheets"][sheetName]["refIndices"]));
+                        sessionStorage.getItem(sheetName)['rowErrors'] = JSON.stringify(data.data["sheets"][sheetName]["rowIndices"]);
+                        sessionStorage.getItem(sheetName)['colErrors'] = JSON.stringify(data.data["sheets"][sheetName]["colIndices"]);
+                        sessionStorage.getItem(sheetName)['divErrors'] = JSON.stringify(data.data["sheets"][sheetName]["divIndices"]);
+                        sessionStorage.getItem(sheetName)['refErrors'] = JSON.stringify(data.data["sheets"][sheetName]["refIndices"]);
                         function highlight(index, color) {
                             var cell = usedRange.getCell(index[0], index[1]);
                             cell.format.fill.color = color;
