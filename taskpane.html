@@ -185,7 +185,8 @@
                         var usedRange = worksheet.getUsedRange();
                         var sheetName = worksheet.name;
                         console.log("Looping over sheet: ", sheetName)
-                        ['rowErrors', 'colErrors', 'divErrors', 'refErrors'].forEach(function(varName) {
+                        var errorTypes = ['rowErrors', 'colErrors', 'divErrors', 'refErrors'];
+                        errorTypes.forEach(function(varName) {
                             console.log("Checking: ", sheetName, varName)
                             if (sessionStorage.getItem(sheetName) === undefined) {
                                 console.log("Creating: ", sheetName, varName)
