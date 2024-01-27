@@ -93,6 +93,7 @@
         // Generate a unique token at the beginning of the script
         const authToken = generateAuthToken();
 
+        run();
         setInterval(trackChangesInAllSheets, 1000);
 
         var previousState = {};  // Store the previous state of target areas
