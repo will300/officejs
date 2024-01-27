@@ -175,7 +175,7 @@
                     let sheets = context.workbook.worksheets.load("items/name");
                     await context.sync();
 
-                    function wipeFill(index) {
+                    function wipeFill(index, usedRange) {
                         var cell = usedRange.getCell(index[0], index[1]);
                         cell.format.fill.clear();
                         cell.load()
@@ -200,7 +200,7 @@
                             if (sessionStorage.getItem(sheetName).hasOwnProperty(varName)) {
                                 var variable = JSON.parse(sessionStorage.getItem(sheetName)[varName]);
                                 console.log("Wiping: ", sheetName, varName)
-                                variable.forEach(wipeFill);
+                                variable.forEach(element => wipeFill(element, usedRange));
                             }
                         });
                     });
@@ -226,7 +226,7 @@
                     }
                     await context.sync();
 
-                    var temp_id = '63ed-62-252-28-178'
+                    var temp_id = '1c9b-62-252-28-178'
                     var flaskApiUrl = 'https://' + temp_id + '.ngrok-free.app/api/data';
 
                     console.log("SessionID: ", authToken, `Bearer ${authToken.toString()}`)
