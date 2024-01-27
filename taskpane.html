@@ -188,8 +188,9 @@
                             if (!sessionStorage.getItem(sheetName)) {
                                 sessionStorage[sheetName] = {};
                             }
-                            else if (sessionStorage.getItem(sheetName).hasOwnProperty(varName)) {
+                            if (sessionStorage.getItem(sheetName).hasOwnProperty(varName)) {
                                 var variable = JSON.parse(sessionStorage.getItem(sheetName)[varName]);
+                                console.log("Wiping: ", sheetName, varName)
                                 variable.forEach(wipeFill);
                             }
                         });
