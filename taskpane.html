@@ -190,7 +190,7 @@
                             console.log("Checking: ", sheetName, varName)
                             if (sessionStorage.getItem(sheetName) === undefined | sessionStorage.getItem(sheetName) === null) {
                                 console.log("Creating: ", sheetName, varName)
-                                sessionStorage.getItem(sheetName) = {
+                                sessionStorage[sheetName] = {
                                     'rowErrors': [], 
                                     'colErrors': [], 
                                     'divErrors': [], 
@@ -259,10 +259,10 @@
                         usedRange = worksheet.getUsedRange();
                         sheetName = worksheet.name
                         
-                        sessionStorage.getItem(sheetName)['rowErrors'] = JSON.stringify(data.data["sheets"][sheetName]["rowIndices"]);
-                        sessionStorage.getItem(sheetName)['colErrors'] = JSON.stringify(data.data["sheets"][sheetName]["colIndices"]);
-                        sessionStorage.getItem(sheetName)['divErrors'] = JSON.stringify(data.data["sheets"][sheetName]["divIndices"]);
-                        sessionStorage.getItem(sheetName)['refErrors'] = JSON.stringify(data.data["sheets"][sheetName]["refIndices"]);
+                        sessionStorage[sheetName]['rowErrors'] = JSON.stringify(data.data["sheets"][sheetName]["rowIndices"]);
+                        sessionStorage[sheetName]['colErrors'] = JSON.stringify(data.data["sheets"][sheetName]["colIndices"]);
+                        sessionStorage[sheetName]['divErrors'] = JSON.stringify(data.data["sheets"][sheetName]["divIndices"]);
+                        sessionStorage[sheetName]['refErrors'] = JSON.stringify(data.data["sheets"][sheetName]["refIndices"]);
                         function highlight(index, color) {
                             var cell = usedRange.getCell(index[0], index[1]);
                             cell.format.fill.color = color;
