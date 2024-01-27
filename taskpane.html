@@ -188,7 +188,7 @@
                         ['rowErrors', 'colErrors', 'divErrors', 'refErrors'].forEach(function(varName) {
                             if (sessionStorage.getItem(sheetName) == null) {
                                 console.log("Creating: ", sheetName, varName)
-                                sessionStorage[sheetName] = {
+                                sessionStorage.getItem(sheetName) = {
                                     'rowErrors': [], 
                                     'colErrors': [], 
                                     'divErrors': [], 
