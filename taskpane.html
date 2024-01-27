@@ -190,16 +190,16 @@
                             console.log("Checking: ", sheetName, varName)
                             if (sessionStorage.getItem(sheetName) === undefined | sessionStorage.getItem(sheetName) === null) {
                                 console.log("Creating: ", sheetName, varName)
-                                sessionStorage[sheetName] = {
+                                sessionStorage[sheetName] = JSON.stringify({
                                     'rowErrors': [], 
                                     'colErrors': [], 
                                     'divErrors': [], 
                                     'refErrors': []
-                                };
+                                });
                             }
                             console.log("sessionStorage.getItem(sheetName): ", sessionStorage.getItem(sheetName))
-                            if (sessionStorage.getItem(sheetName).hasOwnProperty(varName)) {
-                                var variable = JSON.parse(sessionStorage.getItem(sheetName)[varName]);
+                            if (JSON.parse(sessionStorage.getItem(sheetName)).hasOwnProperty(varName)) {
+                                var variable = JSON.parse(sessionStorage.getItem(sheetName))[varName];
                                 console.log("Wiping: ", sheetName, varName)
                                 variable.forEach(element => wipeFill(element, usedRange));
                             }
