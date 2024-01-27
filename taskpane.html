@@ -186,7 +186,12 @@
                         var sheetName = worksheet.name;
                         ['rowErrors', 'colErrors', 'divErrors', 'refErrors'].forEach(function(varName) {
                             if (!sessionStorage.getItem(sheetName)) {
-                                sessionStorage[sheetName] = {};
+                                sessionStorage[sheetName] = {
+                                    'rowErrors': [], 
+                                    'colErrors': [], 
+                                    'divErrors': [], 
+                                    'refErrors': []
+                                };
                             }
                             if (sessionStorage.getItem(sheetName).hasOwnProperty(varName)) {
                                 var variable = JSON.parse(sessionStorage.getItem(sheetName)[varName]);
