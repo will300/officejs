@@ -188,7 +188,7 @@
                         var errorTypes = ['rowErrors', 'colErrors', 'divErrors', 'refErrors'];
                         errorTypes.forEach(function(varName) {
                             console.log("Checking: ", sheetName, varName)
-                            if (sessionStorage.getItem(sheetName) === undefined) {
+                            if (sessionStorage.getItem(sheetName) === undefined | sessionStorage.getItem(sheetName) === null) {
                                 console.log("Creating: ", sheetName, varName)
                                 sessionStorage.getItem(sheetName) = {
                                     'rowErrors': [], 
