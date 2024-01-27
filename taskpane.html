@@ -151,7 +151,7 @@
                           var cell = usedRange.getCell(index[0], index[1]);
                           cell.format.fill.tintAndShade = (isActive) ? 0 :0.8;
                           cell.load()
-                        }
+                      }
                       
                       console.log("Checking for errors");
                       console.log(errors);
@@ -180,28 +180,26 @@
                         cell.format.fill.clear();
                         cell.load()
                         }
-                    var usedRange = sheets.items[0].getUsedRange();
-                    if (sessionStorage.getItem('rowErrors')) {
-                        var rowErrors = JSON.parse(sessionStorage.getItem('rowErrors'));
-                        rowErrors.forEach(wipeFill)
-                    }
-                    if (sessionStorage.getItem('colErrors')) {
-                        var colErrors = JSON.parse(sessionStorage.getItem('colErrors'));
-                        colErrors.forEach(wipeFill)
-                    }
-                    if (sessionStorage.getItem('divErrors')) {
-                        var divErrors = JSON.parse(sessionStorage.getItem('divErrors'));
-                        divErrors.forEach(wipeFill)
-                    }
-                    if (sessionStorage.getItem('refErrors')) {
-                        var refErrors = JSON.parse(sessionStorage.getItem('refErrors'));
-                        refErrors.forEach(wipeFill)
-                    }
+                    
+                    sheets.items.forEach(function (worksheet) {
+                        var usedRange = worksheet.getUsedRange();
+                        var sheetName = worksheet.name;
+                        ['rowErrors', 'colErrors', 'divErrors', 'refErrors'].forEach(function(varName) {
+                            if (!sessionStorage.getItem(sheetName)) {
+                                sessionStorage[sheetName] = {};
+                            }
+                            else if (sessionStorage[sheetName].getItem(varName)) {
+                                var variable = JSON.parse(sessionStorage[sheetName].getItem(varName));
+                                variable.forEach(wipeFill);
+                            }
+                        });
+                    });
                     await context.sync();
 
                     const dataToSend = {
                         "sheets": []
                     };
+
                     var sheetNumber = 1;
                     sheets.items.forEach((sheet) => {
                         //dataToSend["sheet" + sheetNumber.toString()] = sheet.getUsedRange()
@@ -235,25 +233,36 @@
                         var data = await response.json()
 
                         data.data = JSON.parse(data.data)
+                        data.data["sheets"] = data.data["sheets"].reduce(function(result, currentDict) {
+                            var name = currentDict.sheetName;
+                            delete currentDict.sheetName;
+                            result[name] = currentDict;
+                            return result;
+                        }, {});
+
                     } catch(error) {
                         throw error
                     }
 
-                    usedRange = sheets.items[0].getUsedRange();
-                    sessionStorage.setItem('rowErrors', JSON.stringify(data.data["sheet1"]["rowIndices"]));
-                    sessionStorage.setItem('colErrors', JSON.stringify(data.data["sheet1"]["colIndices"]));
-                    sessionStorage.setItem('divErrors', JSON.stringify(data.data["sheet1"]["divIndices"]));
-                    sessionStorage.setItem('refErrors', JSON.stringify(data.data["sheet1"]["refIndices"]));
-                    function highlight(index, color) {
-                        var cell = usedRange.getCell(index[0], index[1]);
-                        cell.format.fill.color = color;
-                        cell.format.fill.tintAndShade = 0.8;
-                        cell.load()
-                    }
-                    data.data["sheet1"]["rowIndices"].forEach(element => highlight(element, "purple"))
-                    data.data["sheet1"]["colIndices"].forEach(element => highlight(element, "orange"))
-                    data.data["sheet1"]["divIndices"].forEach(element => highlight(element, "red"))
-                    data.data["sheet1"]["refIndices"].forEach(element => highlight(element, "blue"))
+                    sheets.items.forEach(function (worksheet) {
+                        usedRange = worksheet.getUsedRange();
+                        sheetName = worksheet.name
+                        
+                        sessionStorage[sheetName].setItem('rowErrors', JSON.stringify(data.data["sheets"][sheetName]["rowIndices"]));
+                        sessionStorage[sheetName].setItem('colErrors', JSON.stringify(data.data["sheets"][sheetName]["colIndices"]));
+                        sessionStorage[sheetName].setItem('divErrors', JSON.stringify(data.data["sheets"][sheetName]["divIndices"]));
+                        sessionStorage[sheetName].setItem('refErrors', JSON.stringify(data.data["sheets"][sheetName]["refIndices"]));
+                        function highlight(index, color) {
+                            var cell = usedRange.getCell(index[0], index[1]);
+                            cell.format.fill.color = color;
+                            cell.format.fill.tintAndShade = 0.8;
+                            cell.load()
+                        }
+                        data.data["sheets"][sheetName]["rowIndices"].forEach(element => highlight(element, "purple"))
+                        data.data["sheets"][sheetName]["colIndices"].forEach(element => highlight(element, "orange"))
+                        data.data["sheets"][sheetName]["divIndices"].forEach(element => highlight(element, "red"))
+                        data.data["sheets"][sheetName]["refIndices"].forEach(element => highlight(element, "blue"))
+                    })
                     return context.sync().then(function () {
                         console.log("Fill color changed successfully.");
                     });
