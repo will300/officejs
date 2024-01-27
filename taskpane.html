@@ -190,12 +190,12 @@
                             console.log("Checking: ", sheetName, varName)
                             if (sessionStorage.getItem(sheetName) === undefined | sessionStorage.getItem(sheetName) === null) {
                                 console.log("Creating: ", sheetName, varName)
-                                sessionStorage[sheetName] = JSON.stringify({
+                                sessionStorage.setItem(sheetName, JSON.stringify({
                                     'rowErrors': [], 
                                     'colErrors': [], 
                                     'divErrors': [], 
                                     'refErrors': []
-                                }); //
+                                })); //
                             }
                             console.log("sessionStorage.getItem(sheetName): ", sessionStorage.getItem(sheetName))
                             if (JSON.parse(sessionStorage.getItem(sheetName)).hasOwnProperty(varName)) {
@@ -259,10 +259,12 @@
                         usedRange = worksheet.getUsedRange();
                         sheetName = worksheet.name
                         
-                        sessionStorage[sheetName]['rowErrors'] = JSON.stringify(data.data["sheets"][sheetName]["rowIndices"]);
-                        sessionStorage[sheetName]['colErrors'] = JSON.stringify(data.data["sheets"][sheetName]["colIndices"]);
-                        sessionStorage[sheetName]['divErrors'] = JSON.stringify(data.data["sheets"][sheetName]["divIndices"]);
-                        sessionStorage[sheetName]['refErrors'] = JSON.stringify(data.data["sheets"][sheetName]["refIndices"]);
+                        sessionStorage.setItem(sheetName, JSON.stringify({
+                                                           'rowErrors': data.data["sheets"][sheetName]["rowIndices"],
+                                                           'colErrors': data.data["sheets"][sheetName]["colIndices"],
+                                                           'divErrors': data.data["sheets"][sheetName]["divIndices"],
+                                                           'refErrors': data.data["sheets"][sheetName]["refIndices"]
+                                                           }))
                         function highlight(index, color) {
                             var cell = usedRange.getCell(index[0], index[1]);
                             cell.format.fill.color = color;
