@@ -77,11 +77,11 @@
 
 <body>
     <!-- Put a button on the task pane -->
-    <button id="run-btn" type="button">Refresh</button>
+    <!-- button id="run-btn" type="button">Refresh</button>
     <div class="check-block check-1" onclick="toggleCheck(this, 'rowErrors')">Row References</div>
     <div class="check-block check-2" onclick="toggleCheck(this, 'colErrors')">Column References</div>
     <div class="check-block check-3" onclick="toggleCheck(this, 'divErrors')">Div Errors</div>
-    <div class="check-block check-4" onclick="toggleCheck(this, 'refErrors')">Ref Errors</div>
+    <div class="check-block check-4" onclick="toggleCheck(this, 'refErrors')">Ref Errors</div-->
   
     <script>
         // Initialize Office.js
@@ -121,6 +121,7 @@
                                     if (!arraysEqual(currentState, previousState[worksheet.name])) {
                                         //console.log("Changes detected in sheet " + worksheet.name + ": " + JSON.stringify(currentState));
                                         run();
+                                        updateDivs();
                                     }
 
                                     // Update previous state for the current sheet
@@ -133,6 +134,45 @@
 
         function arraysEqual(arr1, arr2) {
             return JSON.stringify(arr1) === JSON.stringify(arr2);
+        }
+
+        function create_error_div(index, usedRange) {
+
+            const div = document.createElement('div');
+            div.textContent = `Error in cell (${index[0]}, ${index[1]})`;
+            div.className = 'check-block check-1'; // Apply the CSS class
+            div.onclick = function() {
+                alert('Div clicked!');
+            };
+            document.body.appendChild(div);
+
+        }
+
+        function updateDivs() {
+            // Remove existing divs in the body
+            const existingDivs = document.querySelectorAll('body > div');
+            existingDivs.forEach(div => div.remove());
+
+            var errorTypes = ['rowErrors', 'colErrors', 'divErrors', 'refErrors'];
+                errorTypes.forEach(function(varName) {
+                    console.log("Checking: ", sheetName, varName)
+                    if (sessionStorage.getItem(sheetName) === undefined | sessionStorage.getItem(sheetName) === null) {
+                        console.log("Creating: ", sheetName, varName)
+                        sessionStorage.setItem(sheetName, JSON.stringify({
+                            'rowErrors': [], 
+                            'colErrors': [], 
+                            'divErrors': [], 
+                            'refErrors': []
+                        })); 
+                    }
+                    console.log("sessionStorage.getItem(sheetName): ", sessionStorage.getItem(sheetName))
+                    if (JSON.parse(sessionStorage.getItem(sheetName)).hasOwnProperty(varName)) {
+                        var variable = JSON.parse(sessionStorage.getItem(sheetName))[varName];
+                        console.log("Wiping: ", sheetName, varName)
+                        variable.forEach(element => create_error_div(element, usedRange));
+                    }
+                });
+
         }
 
         async function toggleCheck(element, errors) {
