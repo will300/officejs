@@ -160,7 +160,7 @@
             // Remove existing divs in the body
             const existingDivs = document.querySelectorAll('body > div');
             existingDivs.forEach(div => div.remove());
-
+            console.log("Updating Divs")
             var errorTypes = ['rowErrors', 'colErrors', 'divErrors', 'refErrors'];
                 errorTypes.forEach(function(varName) {
                     console.log("Checking: ", sheetName, varName)
