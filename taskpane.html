@@ -137,26 +137,6 @@
             return JSON.stringify(arr1) === JSON.stringify(arr2);
         }
 
-        function create_error_div(index, usedRange) {
-
-            const div = document.createElement('div');
-            div.textContent = `Error in cell (${index[0]}, ${index[1]})`;
-            div.className = 'check-block check-1'; // Apply the CSS class
-            div.onclick = function handleClick(cellReference) {
-                Excel.run(function (context) {
-                    var sheet = context.workbook.worksheets.getActiveWorksheet();
-                    var range = sheet.getUsedRange();
-                    var cell = range.getCell(index[0], index[1]);
-                    cell.select();
-                    return context.sync();
-                }).catch(function (error) {
-                    console.error(error); //
-                });
-            };
-            document.body.appendChild(div);
-
-        }
-
         function updateDivs() {
             // Remove existing divs in the body //
             const existingDivs = document.querySelectorAll('body > div');
@@ -184,39 +164,35 @@
 
         }
 
-        async function toggleCheck(element, errors) {
-            // Remove 'active' class from all check blocks
-            element.classList.toggle('active');
-            var isActive = element.classList.contains('active');
-            //try {
-            console.log("About to try fading");
-                await Excel.run(async (context) => {
-                      console.log("Getting range");
-                      let sheets = context.workbook.worksheets.load("items/name");
-                      await context.sync();
-                      var usedRange = sheets.items[0].getUsedRange();
+        function create_error_div(container, index, usedRange) {
 
-                      function fadeFill(index) {
-                          console.log("Fading fill");
-                          var cell = usedRange.getCell(index[0], index[1]);
-                          cell.format.fill.tintAndShade = (isActive) ? 0 :0.8;
-                          cell.load()
-                      }
-                      
-                      console.log("Checking for errors");
-                      console.log(errors);
-                      if (sessionStorage.getItem(errors)) {
-                          console.log("Found some")
-                          var errorIndices = JSON.parse(sessionStorage.getItem(errors));
-                          errorIndices.forEach(fadeFill)
-                      }
-                      console.log("Done");
-                    await context.sync();
-                    });
-                //} catch (error) {
-                //    console.log("Error: " + error);
-                //}  
+            const div = document.createElement('div');
+            div.textContent = `Error in cell (${index[0]}, ${index[1]})`;
+            div.className = 'check-block check-1'; // Apply the CSS class
+            div.onclick = function handleClick(cellReference) {
+                Excel.run(function (context) {
+                    var sheet = context.workbook.worksheets.getActiveWorksheet();
+                    var range = sheet.getUsedRange();
+                    var cell = range.getCell(index[0], index[1]);
+                    cell.select();
+                    return context.sync();
+                }).catch(function (error) {
+                    console.error(error); //
+                });
+            };
+            container.appendChild(div);
+
+        }
+
+        function create_error_div_container(sheetName) {
+            if (!document.getElementById(sheetName)) {
+                var containerDiv = document.createElement('div');
+                containerDiv.textContent = `Errors for ${sheetName}`;
+                containerDiv.id = sheetName;
+                containerDiv.className = 'check-block check-1';
             }
+            return document.getElementById(sheetName)
+        }
 
         async function run() {
             try {
@@ -234,6 +210,7 @@
                     sheets.items.forEach(function (worksheet) {
                         var usedRange = worksheet.getUsedRange();
                         var sheetName = worksheet.name;
+                        var container = create_error_div_container(sheetName)
                         console.log("Looping over sheet: ", sheetName)
                         var errorTypes = ['rowErrors', 'colErrors', 'divErrors', 'refErrors'];
                         errorTypes.forEach(function(varName) {
@@ -252,7 +229,7 @@
                                 var variable = JSON.parse(sessionStorage.getItem(sheetName))[varName];
                                 console.log("Wiping: ", sheetName, varName)
                                 variable.forEach(element => wipeFill(element, usedRange));
-                                variable.forEach(element => create_error_div(element, usedRange));
+                                variable.forEach(element => create_error_div(container, element, usedRange));
                             }
                         });
                     });
@@ -348,6 +325,40 @@
 
             return token;
         }
+
+        async function toggleCheck(element, errors) {
+            // Remove 'active' class from all check blocks
+            element.classList.toggle('active');
+            var isActive = element.classList.contains('active');
+            //try {
+            console.log("About to try fading");
+                await Excel.run(async (context) => {
+                      console.log("Getting range");
+                      let sheets = context.workbook.worksheets.load("items/name");
+                      await context.sync();
+                      var usedRange = sheets.items[0].getUsedRange();
+
+                      function fadeFill(index) {
+                          console.log("Fading fill");
+                          var cell = usedRange.getCell(index[0], index[1]);
+                          cell.format.fill.tintAndShade = (isActive) ? 0 :0.8;
+                          cell.load()
+                      }
+                      
+                      console.log("Checking for errors");
+                      console.log(errors);
+                      if (sessionStorage.getItem(errors)) {
+                          console.log("Found some")
+                          var errorIndices = JSON.parse(sessionStorage.getItem(errors));
+                          errorIndices.forEach(fadeFill)
+                      }
+                      console.log("Done");
+                    await context.sync();
+                    });
+                //} catch (error) {
+                //    console.log("Error: " + error);
+                //}  
+            }
 
     </script>
 </body>
