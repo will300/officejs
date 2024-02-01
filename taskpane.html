@@ -95,6 +95,7 @@
 
         sessionStorage.clear();  //  
         run();
+        //updateDivs();
         setInterval(trackChangesInAllSheets, 1000);
 
         var previousState = {};  // Store the previous state of target areas
@@ -121,7 +122,7 @@
                                     if (!arraysEqual(currentState, previousState[worksheet.name])) {
                                         //console.log("Changes detected in sheet " + worksheet.name + ": " + JSON.stringify(currentState));
                                         run();
-                                        updateDivs(); //
+                                        //updateDivs(); //
                                     }
 
                                     // Update previous state for the current sheet
@@ -251,6 +252,7 @@
                                 var variable = JSON.parse(sessionStorage.getItem(sheetName))[varName];
                                 console.log("Wiping: ", sheetName, varName)
                                 variable.forEach(element => wipeFill(element, usedRange));
+                                variable.forEach(element => create_error_div(element, usedRange));
                             }
                         });
                     });
