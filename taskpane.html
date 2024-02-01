@@ -168,7 +168,7 @@
 
             const div = document.createElement('div');
             div.textContent = `Error in cell (${index[0]}, ${index[1]})`;
-            div.className = 'check-block check-1'; // Apply the CSS class
+            div.className = 'check-block check-1'; 
             div.onclick = function handleClick(cellReference) {
                 Excel.run(function (context) {
                     var sheet = context.workbook.worksheets.getActiveWorksheet();
