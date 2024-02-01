@@ -186,10 +186,12 @@
 
         function create_error_div_container(sheetName) {
             if (document.getElementById(sheetName) === null) {
-                var containerDiv = document.createElement('div');
+                console.log(`Making container for ${sheetName}`)
+                const containerDiv = document.createElement('div');
                 containerDiv.textContent = `Errors for ${sheetName}`;
                 containerDiv.id = sheetName;
                 containerDiv.className = 'check-block check-1';
+                console.log("Here it is: ", containerDiv)
             }
             console.log(document.getElementById(sheetName))
             return document.getElementById(sheetName);
